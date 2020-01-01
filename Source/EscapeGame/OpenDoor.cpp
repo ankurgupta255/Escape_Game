@@ -42,8 +42,9 @@ void UOpenDoor::OpenDoor()
 void UOpenDoor::CloseDoor()
 {
 	// AActor* Owner = GetOwner();
-	FRotator NewRotation = FRotator(0.f, 0.f, 0.f);
-	Owner->SetActorRotation(NewRotation);
+	/*FRotator NewRotation = FRotator(0.f, 0.f, 0.f);
+	Owner->SetActorRotation(NewRotation);*/
+	OnCloseRequest.Broadcast();
 }
 
 
@@ -52,14 +53,17 @@ void UOpenDoor::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompon
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	if (GetTotalMassOfActorsOnPlate() > 50.f) {
+	if (GetTotalMassOfActorsOnPlate() > TriggerMass) {
 		OpenDoor();
-		LastDoorOpenTime= GetWorld()->GetTimeSeconds();
+		//LastDoorOpenTime= GetWorld()->GetTimeSeconds();
 	}
-
-	if (GetWorld()->GetTimeSeconds() - LastDoorOpenTime > DoorCloseDelay) {
+	else {
 		CloseDoor();
 	}
+
+	/*if (GetWorld()->GetTimeSeconds() - LastDoorOpenTime > DoorCloseDelay) {
+		CloseDoor();
+	}*/
 
 	
 }
